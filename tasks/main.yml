@@ -1,0 +1,56 @@
+---
+- name: Install base packages
+  apt: name={{item}} state=latest
+  with_items:
+    - libncurses5-dev
+    - build-essential
+    - automake
+    - autoconf
+    - openssl
+    - libreadline6
+    - libreadline6-dev
+    - curl
+    - git-core
+    - zlib1g
+    - zlib1g-dev
+    - libssl-dev
+    - libyaml-dev
+    - libsqlite3-dev
+    - sqlite3
+    - libxml2-dev
+    - libxslt-dev
+    - autoconf
+    - libc6-dev
+    - libtool
+    - bison
+  sudo: yes
+
+- name: Creates private build directory
+  file: path=~/build state=directory
+
+- name: fetch tarball
+  get_url:
+    url: https://cache.ruby-lang.org/pub/ruby/2.4/ruby-2.4.1.tar.gz
+    dest: ~/build/ruby-2.4.1.tar.gz
+    checksum: a330e10d5cb5e53b3a0078326c5731888bb55e32c4abfeb27d9e7f8e5d000250
+
+- name: unball
+  command: tar -zxvf ruby-2.4.1.tar.gz
+  args:
+    chdir: ~/build
+
+- name: configure and make
+  command: ./configure && make
+  args:
+    chdir: ~/build/ruby-2.4.1
+
+- name: make install
+  command: ./configure && make
+  args:
+    chdir: ~/build/ruby-2.4.1
+  become: true
+
+- name: cleanup
+  file:
+    src: ~/build
+    state: absent

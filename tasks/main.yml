@@ -23,7 +23,7 @@
     - libc6-dev
     - libtool
     - bison
-  sudo: yes
+  become: true
 
 - name: Creates private build directory
   file: path=~/build state=directory
@@ -32,7 +32,7 @@
   get_url:
     url: https://cache.ruby-lang.org/pub/ruby/2.4/ruby-2.4.1.tar.gz
     dest: ~/build/ruby-2.4.1.tar.gz
-    checksum: a330e10d5cb5e53b3a0078326c5731888bb55e32c4abfeb27d9e7f8e5d000250
+    checksum: sha256:a330e10d5cb5e53b3a0078326c5731888bb55e32c4abfeb27d9e7f8e5d000250
 
 - name: unball
   command: tar -zxvf ruby-2.4.1.tar.gz
